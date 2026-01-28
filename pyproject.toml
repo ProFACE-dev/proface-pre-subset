@@ -1,0 +1,44 @@
+# SPDX-FileCopyrightText: 2026 ProFACE developers
+#
+# SPDX-License-Identifier: MIT
+
+[project]
+name = "proface-pre-subset"
+version = "0.1.0.dev1"
+description = "ProFACE preprocessor tool: extract FEA subdomain"
+readme = "README.md"
+authors = [
+    { name = "Stefano Miccoli", email = "stefano.miccoli@polimi.it" },
+    { name = "Lorenzo Rusnati", email = "lorenzo.rusnati@polimi.it" }
+]
+mantainers = [
+    { name = "ProFACE developers", email = "proface@polimi.it" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "attrs>=25.4.0",
+    "cattrs>=25.3.0",
+    "h5py>=3.15.1",
+    "numpy>=2.4.1",
+    "proface-pre>=0.3.0",
+]
+
+[project.entry-points."proface.preprocessor.tools"]
+subset = "proface.tools.preprocessor.subset:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+# this is a namespace package:
+packages = ["src/proface"]
+
+#
+# ruff
+#
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = ["E","F","UP","B","SIM","I","RUF", "TRY", "ANN"]
