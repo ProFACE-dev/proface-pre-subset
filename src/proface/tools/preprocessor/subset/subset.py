@@ -58,8 +58,17 @@ def _structure(job: dict[str, str]) -> Config:
     return config
 
 
-def modify(*, h5: h5py.File, job: dict[str, str], job_path: Path) -> None:
+def modify(*, job: dict[str, str], job_path: Path, h5: h5py.File) -> None:
     """modify in place h5, computing subset defined in job"""
+
+    # explicit type checking,
+    if (
+        not isinstance(job, dict)
+        or not isinstance(job_path, Path)
+        or not isinstance(h5, h5py.File)
+    ):
+        msg = "Invalid arg types"
+        raise TypeError()
 
     # parse config
     config = _structure(job)
@@ -77,7 +86,7 @@ def modify(*, h5: h5py.File, job: dict[str, str], job_path: Path) -> None:
     if config.internal_interface in h5["/sets/node"]:
         msg = (
             f"Internal interface name ({config.internal_interface}) "
-            "already present in '/sets/node'"
+            "already present in '/sets/node'."
         )
         raise SubsetError(msg)
 
