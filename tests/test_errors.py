@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 
+import logging
 from pathlib import Path
 
 import attrs
@@ -41,6 +42,19 @@ def valid_job():
 def test_dummy_run(h5_file, h5_pth, valid_job):
     """this checks that the dummy config does not raises errors"""
     subset.main(job=valid_job, job_path=h5_pth, h5=h5_file)
+
+
+def test_extra_key_warn(h5_file, h5_pth, valid_job, caplog):
+    """this checks that warning for extra keys is logged"""
+    job = valid_job
+    job["foo"] = "bar"
+    job["baz"] = []
+    subset.main(job=valid_job, job_path=h5_pth, h5=h5_file)
+    assert len(caplog.record_tuples) == 1
+    ((logger_name, log_level, message),) = caplog.record_tuples
+    assert logger_name == "proface.tools.preprocessor.subset.subset"
+    assert log_level == logging.WARNING
+    assert message.endswith("Unexpected keys in job configuration: foo, baz.")
 
 
 def test_main_args_types(h5_file, h5_pth):

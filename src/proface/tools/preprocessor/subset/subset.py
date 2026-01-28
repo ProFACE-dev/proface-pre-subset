@@ -52,7 +52,7 @@ def _structure(job: dict[str, str]) -> Config:
     unexpected = [i for i in job if i not in expected]
     if unexpected:
         logger.warning(
-            "Unexpected keys in job configuration: %s", ", ".join(unexpected)
+            "Unexpected keys in job configuration: %s.", ", ".join(unexpected)
         )
 
     return config
