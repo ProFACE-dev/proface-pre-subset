@@ -4,7 +4,7 @@
 
 [project]
 name = "proface-pre-subset"
-version = "0.1.1.dev1"
+dynamic = ["version"]
 description = "ProFACE preprocessor tool: extract FEA subdomain"
 readme = "README.md"
 license = "MIT"
@@ -57,12 +57,21 @@ dev = [
 subset = "proface.tools.preprocessor.subset:main"
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "vcs"
 
 [tool.hatch.build.targets.wheel]
 # this is a namespace package:
 packages = ["src/proface"]
+
+[tool.uv]
+cache-keys = [
+    { file = "pyproject.toml" },
+    { git = { commit = true, tags = true } },
+]
 
 #
 # ruff
