@@ -46,6 +46,7 @@ Homepage = "https://proface.polimi.it"
 [dependency-groups]
 dev = [
     "coverage>=7.13.2",
+    "mypy>=1.18.2",
     "pytest>=9.0.2",
 ]
 
@@ -71,3 +72,12 @@ select = ["E","F","UP","B","SIM","I","RUF", "TRY", "ANN"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["ANN"]
+
+[tool.mypy]
+python_version = "3.13"
+files = ["src"]
+strict = true
+
+[[tool.mypy.overrides]]
+module = ["h5py"]
+ignore_missing_imports = true

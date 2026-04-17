@@ -17,6 +17,10 @@ from proface.preprocessor import PreprocessorError
 
 logger = logging.getLogger(__name__)
 
+type IntArray = npt.NDArray[np.integer[Any]]
+type BoolArray = npt.NDArray[np.bool_]
+type AnyArray = npt.NDArray[Any]
+
 
 class SubsetError(PreprocessorError):
     """plugin error conditions"""
@@ -34,7 +38,7 @@ def _structure(job: dict[str, str]) -> Config:
     c = cattrs.Converter(forbid_extra_keys=False)
 
     @c.register_structure_hook
-    def validate(val: Any, _) -> str:  # noqa: ANN001, ANN401
+    def validate(val: Any, _: object) -> str:  # noqa: ANN401
         if not isinstance(val, str):
             msg = f"{val!r} not a string"
             raise ValueError(msg)  # noqa: TRY004
@@ -93,8 +97,9 @@ def modify(*, job: dict[str, str], job_path: Path, h5: h5py.File) -> None:
     # create array.array for subset of nodes of kept/discarded elements
     gnode_type = h5["/nodes/numbers"].dtype
     assert gnode_type.isnative
-    arr_gnode_keep = array.array(gnode_type.char)
-    arr_gnode_discard = array.array(gnode_type.char)
+    assert gnode_type.kind in {"i", "u"}
+    arr_gnode_keep: array.array[int] = array.array(gnode_type.char)
+    arr_gnode_discard: array.array[int] = array.array(gnode_type.char)
 
     # process /elements
     for eltype, group in h5["/elements"].items():
@@ -135,9 +140,9 @@ def _process_elements(
     eltype: str,
     group: h5py.Group,
     results: h5py.Group,
-    subset: npt.NDArray,
-    arr_node_keep: array.array,
-    arr_node_discard: array.array,
+    subset: IntArray,
+    arr_node_keep: array.array[int],
+    arr_node_discard: array.array[int],
 ) -> None:
     """process /elements"""
     logger.info("Processing %s", group.name)
@@ -204,9 +209,9 @@ def _process_elements(
 def _process_nodes(
     *,
     group: h5py.Group,
-    arr_keep: array.array,
-    arr_discard: array.array,
-) -> tuple[npt.NDArray, npt.NDArray]:
+    arr_keep: array.array[int],
+    arr_discard: array.array[int],
+) -> tuple[IntArray, IntArray]:
     """process /nodes group"""
     logger.info("Processing %s", group.name)
 
@@ -230,7 +235,7 @@ def _process_nodes(
     return set_keep, set_discard
 
 
-def _process_sets(group: h5py.Group, set_numbers: npt.NDArray) -> None:
+def _process_sets(group: h5py.Group, set_numbers: IntArray) -> None:
     logger.info("Processing %s", group.name)
 
     for ds in group.values():
@@ -238,7 +243,7 @@ def _process_sets(group: h5py.Group, set_numbers: npt.NDArray) -> None:
         _replace_data(ds, set_ds)
 
 
-def _replace_data(ds: h5py.Dataset, data: npt.NDArray) -> None:
+def _replace_data(ds: h5py.Dataset, data: AnyArray) -> None:
     """replace dataset with new data, delete if data empty"""
     logger.debug(
         "- %s (%d \N{RIGHTWARDS ARROW} %d)", ds.name, len(ds), len(data)
@@ -262,8 +267,8 @@ def _replace_data(ds: h5py.Dataset, data: npt.NDArray) -> None:
 def _subset_results(
     eltype: str,
     results: h5py.Group,
-    idx_numbers: npt.NDArray | list[Never],
-    idx_nodes: npt.NDArray | list[Never],
+    idx_numbers: BoolArray | list[Never],
+    idx_nodes: IntArray | list[Never],
 ) -> None:
     """subset result values, according do nodal elementa indices"""
 
