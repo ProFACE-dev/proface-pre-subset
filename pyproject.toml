@@ -4,15 +4,30 @@
 
 [project]
 name = "proface-pre-subset"
-version = "0.1.0.post1"
+version = "0.1.1.dev1"
 description = "ProFACE preprocessor tool: extract FEA subdomain"
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSES/MIT.txt"]
 authors = [
     { name = "Stefano Miccoli", email = "stefano.miccoli@polimi.it" },
     { name = "Lorenzo Rusnati", email = "lorenzo.rusnati@polimi.it" }
 ]
-mantainers = [
+maintainers = [
     { name = "ProFACE developers", email = "proface@polimi.it" }
+]
+keywords = ["proface", "preprocessor", "plugin"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed",
 ]
 requires-python = ">=3.13"
 dependencies = [
@@ -22,6 +37,11 @@ dependencies = [
     "numpy>=2.4.1",
     "proface-pre>=0.3.0",
 ]
+
+[project.urls]
+Repository = "https://github.com/ProFACE-dev/proface-pre-subset"
+Issues = "https://github.com/ProFACE-dev/proface-pre-subset/issues"
+Homepage = "https://proface.polimi.it"
 
 [dependency-groups]
 dev = [

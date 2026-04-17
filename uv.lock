@@ -225,7 +225,7 @@ wheels = [
 
 [[package]]
 name = "proface-pre-subset"
-version = "0.1.0.post1"
+version = "0.1.1.dev1"
 source = { editable = "." }
 dependencies = [
     { name = "attrs" },

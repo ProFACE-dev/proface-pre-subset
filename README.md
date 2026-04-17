@@ -7,7 +7,7 @@ SPDX-License-Identifier: MIT
 
 # ProFACE preprocessor subset
 
-This is a `transforms` plugin for `proface-pre`
+This is a `transforms` plugin for `proface-pre >= 0.3.0`
 
 ## Basic usage
 
