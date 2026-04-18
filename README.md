@@ -22,6 +22,14 @@ internal_interface = "INTERNAL_INTERFACE"
 
 where the key
 
-- `subdomain` must be set to element set to keep, and
+- `subdomain` must be set to the element set to keep, and
 - `internal_interface` to the name of a new node set that will contain the interface nodes between the subdomain and the rest of the model.
   This setting is optional: if missing the name `"INTERNAL_INTERFACE"` will be used.
+
+## Installation
+
+To install, run
+
+```bash
+pip install proface-pre-subset
+```
